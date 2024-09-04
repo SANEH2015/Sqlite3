@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 export default function Getallusers() {
   const [newdata, setNewdata] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
- 
+  const [editing, setEditing] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
 
   useEffect(() => {
@@ -33,17 +34,16 @@ export default function Getallusers() {
     }
   };
 
-  const handleUpdate = async (id) => {
-    try {
-      await axios.put(`http://localhost:5000/users/${id}`, currentUser);
-      setNewdata(
-        newdata.map((user) => (user.id === id ? currentUser : user))
-      );
-      setEditing(false);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+
+const handleEdit = async (id) => {
+        try {
+          const response = await axios.get(`http://localhost:5000/users/${id}`);
+          setCurrentUser(response.data);
+          setEditing(true);
+        } catch (error) {
+          console.error(error);
+        }
+      };
 
   const handleChange = (e) => {
     setCurrentUser({ ...currentUser, [e.target.name]: e.target.value });
@@ -79,8 +79,9 @@ export default function Getallusers() {
             </header>
             <div className="w3-container">
               <p>
-                <button onClick={() => handleEdit(user.id)}>Edit</button>
-                <button onClick={() => handleDelete(user.id)}>Delete</button>
+               
+              <Link to={'/Editing'}> <button onClick={() => handleEdit(user.id)}>Edit</button></Link>  
+              <button onClick={() => handleDelete(user.id)}>Delete</button>
               </p>
             </div>
             <footer className="w3-container w3-blue"></footer>

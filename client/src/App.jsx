@@ -6,12 +6,14 @@ import Card from "../pages/Card";
 import Layout from "../pages/Layout";
 import Nopage from "../pages/nopage";
 import AddCard from "../pages/Addcard";
+import Editing from "../pages/Editing";
+import Getallusers from "../component/Getallusers";
 
 function App() {
   const [data, setData] = useState('');
 
   useEffect(() => {
-    axios.get('http://localhost:5000')
+    axios.get('http://localhost:5000/users')
       .then((response) => {
         setData(response.data);
       })
@@ -29,7 +31,11 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Card/>} />
-          <Route path="/Addcard" element={<AddCard/>} />
+          <Route path="/Getallusers" >
+          <Route index  element={<Getallusers/>}/>
+          <Route path=":id"element={<Editing user={data} />}/>
+          </Route>
+          <Route path="Addcard" element={<AddCard />} />
           <Route path="*" element={<Nopage />} />
         </Route>
       </Routes>
