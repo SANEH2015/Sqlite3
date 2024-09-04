@@ -1,9 +1,14 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useEffect, useState } from 'react';
 import './App.css';
 import axios from 'axios';
+import Card from "../pages/Card";
+import Layout from "../pages/Layout";
+import Nopage from "../pages/nopage";
+import AddCard from "../pages/Addcard";
 
 function App() {
-  const [data, setData] = useState(null);
+  const [data, setData] = useState('');
 
   useEffect(() => {
     axios.get('http://localhost:5000')
@@ -15,12 +20,20 @@ function App() {
       });
   }, []); 
 
-  console.log(data);
+  // console.log(data);
 
   return (
     <>
   
-      {data && <div>Data: {data}</div>}
+  <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Card/>} />
+          <Route path="/Addcard" element={<AddCard/>} />
+          <Route path="*" element={<Nopage />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
     </>
   );
 }
